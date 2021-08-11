@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import 'antd/dist/antd.css';
+import movieService from './services/movies';
+import { Layout, Row, Col, Card, Typography } from 'antd';
+const { Text } = Typography;
+const { Content } = Layout;
+const { Meta } = Card;
 
-function App() {
+const App = () => {
+  const [movies, setMovies] = useState([]);
+  useEffect(() => {
+    console.log('ran service');
+    movieService.getAll().then((movies: any) => {
+      setMovies(movies);
+      console.log('movie list,', movies);
+    });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Content>
+      <Row align="middle" justify="center">
+        <Col xs={24} sm={16}>
+          <Row align="middle" justify="center">
+            {movies.map((movie: any) => {
+              return (
+                <Card hoverable style={{ width: 240 }} cover={<img alt="movie poster" src={movie.poster} />}>
+                  <Meta title={`${movie.title} (${movie.year})`} description={movie.plot} />
+                  <Text strong>Director: {movie.director}</Text>
+                </Card>
+              );
+            })}
+          </Row>
+        </Col>
+      </Row>
+    </Content>
   );
-}
+};
 
 export default App;
