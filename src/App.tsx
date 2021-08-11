@@ -9,7 +9,6 @@ const { Meta } = Card;
 const App = () => {
   const [movies, setMovies] = useState([]);
   useEffect(() => {
-    console.log('ran service');
     movieService.getAll().then((movies: any) => {
       setMovies(movies);
       console.log('movie list,', movies);
@@ -23,7 +22,12 @@ const App = () => {
           <Row align="middle" justify="center">
             {movies.map((movie: any) => {
               return (
-                <Card hoverable style={{ width: 240 }} cover={<img alt="movie poster" src={movie.poster} />}>
+                <Card
+                  hoverable
+                  style={{ width: 240 }}
+                  key={movie._id}
+                  cover={<img alt="movie poster" src={movie.poster} />}
+                >
                   <Meta title={`${movie.title} (${movie.year})`} description={movie.plot} />
                   <Text strong>Director: {movie.director}</Text>
                 </Card>
